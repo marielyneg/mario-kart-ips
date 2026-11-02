@@ -1,0 +1,20 @@
+# Environnements virtuels
+.venv/
+venv/
+env/
+
+# Fichiers temporaires Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Fichiers VS Code
+.vscode/
+
+# Fichiers systeme
+.DS_Store
+Thumbs.db
+
+# Fichiers secrets
+.env
+.env.*
