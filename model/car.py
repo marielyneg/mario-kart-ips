@@ -1,7 +1,7 @@
 import pygame
 import math
 from constants import (
-    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE
+    CAR_ACCELERATION, CAR_WIDTH, CAR_HEIGHT, TILE_SIZE, WINDOW_WIDTH, WINDOW_HEIGHT
 )
 GRIP_SCALE = 0.87
 
@@ -18,7 +18,11 @@ class Car:
         self.vy: float = 0.0
 
     def accelerate(self) -> None:
-        self.speed += CAR_ACCELERATION
+      max_speed = 5.0
+      self.speed = min(
+        self.speed + CAR_ACCELERATION,
+        max_speed)
+
     def brake(self) -> None:
      """Freine la voiture ou active la marche arrière."""
 
@@ -46,25 +50,41 @@ class Car:
     def turn_right(self) -> None:
        """Tourne la voiture vers la droite."""
        self.angle += 1.5
+
+
+
+
+
     def update_position(self) -> None:
-     """Déplace la voiture avec un effet de dérapage."""
+      """Déplace la voiture avec un effet de dérapage."""
 
-     angle_rad = math.radians(self.angle)
-
+      angle_rad = math.radians(self.angle)
+ 
      # Vitesse souhaitée selon l'orientation de la voiture
-     target_vx = self.speed * math.sin(angle_rad)
-     target_vy = self.speed * math.cos(angle_rad)
+      target_vx = self.speed * math.sin(angle_rad)
+      target_vy = self.speed * math.cos(angle_rad)
 
-     terrain_grip = 0.035  # Adhérence provisoire de la route
-     grip = terrain_grip * GRIP_SCALE
+      terrain_grip = 0.035
+      grip = terrain_grip * GRIP_SCALE
 
-     # La vitesse réelle rejoint progressivement la direction souhaitée
-     self.vx += (target_vx - self.vx) * grip
-     self.vy += (target_vy - self.vy) * grip
+      # Dérapage
+      self.vx += (target_vx - self.vx) * grip
+      self.vy += (target_vy - self.vy) * grip
 
-     # Déplacement selon la vitesse réelle
-     self.x += self.vx
-     self.y += self.vy
+      # Déplacement
+      self.x += self.vx
+      self.y += self.vy
+
+      #Limites provisoires de la fenêtre
+      margin = max(CAR_WIDTH, CAR_HEIGHT) / 2
+
+      if self.x < margin or self.x > WINDOW_WIDTH - margin:
+        self.x = max(margin, min(self.x, WINDOW_WIDTH - margin))
+        self.vx = 0.0
+
+      if self.y < margin or self.y > WINDOW_HEIGHT - margin:
+        self.y = max(margin, min(self.y, WINDOW_HEIGHT - margin))
+        self.vy = 0.0
      
     def build_sprite(self) -> pygame.Surface:
         surf = pygame.Surface((CAR_WIDTH, CAR_HEIGHT), pygame.SRCALPHA)

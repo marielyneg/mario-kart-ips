@@ -10,6 +10,7 @@ class GameModel:
         self.state: str = GameState.MENU
         self.circuit: Circuit | None = None
         self.car: Car | None = None
+        self.car2: Car | None = None
 
     def load_circuit(self) -> None:
         grid = [[RoadTile(col=col_idx, row=row_idx)
@@ -19,8 +20,14 @@ class GameModel:
 
     def spawn_car(self) -> None:
         self.car = Car(7, 1)
+        self.car2 = Car(8, 1)
 
+  
     def update(self) -> None:
-        if self.state != GameState.RACING or self.circuit is None:
-            return
-        self.car.update_position()
+     if self.state != GameState.RACING or self.circuit is None:
+        return
+
+     for car in (self.car, self.car2):
+        if car is not None:
+            car.apply_friction()
+            car.update_position()
