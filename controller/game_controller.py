@@ -58,9 +58,24 @@ class GameController:
         self.model.update()
 
     def apply_input(self, car, player_input) -> None:
-        if player_input['accelerate']:
+        """Applique les commandes du joueur 1 à sa voiture."""
+
+        if player_input["p1_accelerate"]:
             car.accelerate()
 
+        if player_input["p1_brake"]:
+         if not getattr(self, "brake_was_pressed", False):
+          car.reverse_mode = car.speed <= 0.05
+
+         car.brake()
+
+        self.brake_was_pressed = player_input["p1_brake"]
+
+        if player_input["p1_left"]:
+            car.turn_left()
+
+        if player_input["p1_right"]:
+            car.turn_right()
     def render(self) -> None:
         self.view.draw(self.model)
 

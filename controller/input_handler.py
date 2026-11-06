@@ -2,7 +2,19 @@ import pygame
 
 
 MAPPING = {
-    pygame.K_UP:     "accelerate",
+    # Joueur 1
+    pygame.K_z: "p1_accelerate",
+    pygame.K_w: "p1_accelerate",
+    pygame.K_s: "p1_brake",
+    pygame.K_q: "p1_left",
+    pygame.K_a: "p1_left",
+    pygame.K_d: "p1_right",
+
+    # Joueur 2
+    pygame.K_UP: "p2_accelerate",
+    pygame.K_DOWN: "p2_brake",
+    pygame.K_LEFT: "p2_left",
+    pygame.K_RIGHT: "p2_right",
 }
 
 
