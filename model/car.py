@@ -24,22 +24,35 @@ class Car:
         self.speed + CAR_ACCELERATION,
         max_speed)
 
+ 
     def brake(self) -> None:
-     """Freine la voiture ou active la marche arrière."""
+       """Freine la voiture ou active la marche arrière."""
 
-     braking_force = CAR_ACCELERATION * 3
+       braking_force = CAR_ACCELERATION * 3
 
-     if self.speed > 0:
+       if self.speed > 0:
         self.speed = max(0.0, self.speed - braking_force)
-        self.vx *= 0.90
-        self.vy *= 0.90
-     elif self.reverse_mode:
-      max_reverse_speed = -2.0
-      self.speed = max(
-         self.speed - CAR_ACCELERATION,
-         max_reverse_speed
-    )
-     
+
+        # Freinage selon le terrain
+        brake_factors = {
+            0.15: 0.85,  # Route
+            0.08: 0.90,  # Herbe
+            0.06: 0.93,  # Terre
+            0.02: 0.98   # Glace
+        }
+
+        factor = brake_factors.get(self.terrain_grip, 0.90)
+
+        self.vx *= factor
+        self.vy *= factor
+
+       elif self.reverse_mode:
+        max_reverse_speed = -2.0
+        self.speed = max(
+            self.speed - CAR_ACCELERATION,
+            max_reverse_speed
+        )
+   
 
     def apply_friction(self) -> None:
       """Ralentit progressivement la voiture sans accélération."""
