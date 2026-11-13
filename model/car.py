@@ -82,7 +82,17 @@ class Car:
         if tile is not None:
             terrain_type = getattr(tile, "terrain_type", "road")
             self.set_terrain(terrain_type)
-           
+
+    
+    def is_on_void(self, circuit) -> bool:
+        """Vérifie si la voiture se trouve sur une case de vide."""
+        tile = circuit.get_tile_at_pixel(self.x, self.y)
+
+        if tile is None:
+            return True
+
+        return getattr(tile, "terrain_type", "road") == "void"
+      
 
     def turn_left(self) -> None:
         """Tourne la voiture vers la gauche."""
@@ -128,7 +138,20 @@ class Car:
         self.y = max(margin, min(self.y, WINDOW_HEIGHT - margin))
         self.vy = 0.0
       
-     
+    
+    def reset_position(self, col: int, row: int) -> None:
+        """Replace la voiture et annule son mouvement."""
+
+        self.x = col * TILE_SIZE + TILE_SIZE // 2
+        self.y = row * TILE_SIZE + TILE_SIZE // 2
+
+        self.speed = 0.0
+        self.vx = 0.0
+        self.vy = 0.0
+
+        self.angle = 0.0
+        self.reverse_mode = False
+ 
     def build_sprite(self) -> pygame.Surface:
         surf = pygame.Surface((CAR_WIDTH, CAR_HEIGHT), pygame.SRCALPHA)
         pygame.draw.rect(surf, (255, 0, 0), (0, 0, CAR_WIDTH,
