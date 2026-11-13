@@ -75,9 +75,20 @@ class Car:
     }
 
       self.terrain_grip = grips.get(terrain_type, 0.15)
+    def update_terrain(self, circuit) -> None:
+        """Met à jour l'adhérence selon la case sous la voiture."""
+        tile = circuit.get_tile_at_pixel(self.x, self.y)
+
+        if tile is not None:
+            terrain_type = getattr(tile, "terrain_type", "road")
+            self.set_terrain(terrain_type)
+           
+
     def turn_left(self) -> None:
-      """Tourne la voiture vers la gauche."""
-      self.angle -= 1.5
+        """Tourne la voiture vers la gauche."""
+        self.angle -= 1.5
+
+
 
     def turn_right(self) -> None:
        """Tourne la voiture vers la droite."""

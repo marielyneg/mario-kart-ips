@@ -30,4 +30,5 @@ class GameModel:
      for car in (self.car, self.car2):
         if car is not None:
             car.apply_friction()
+            car.update_terrain(self.circuit)
             car.update_position()
