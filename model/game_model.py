@@ -28,11 +28,13 @@ class GameModel:
      if self.state != GameState.RACING or self.circuit is None:
         return
 
+    
      for car in (self.car, self.car2):
         if car is not None:
             car.apply_friction()
             car.update_terrain(self.circuit)
             car.update_position()
             if car.is_on_void(self.circuit):
-                 car.reset_position(7, 1)
+                 car.reset_position(car.respawn_col, car.respawn_row)
+ 
                  

@@ -14,6 +14,8 @@ class Car:
         self.angle: float = 0.0
         self.sprite = self.build_sprite()
         self.reverse_mode = False
+        self.respawn_col = start_col
+        self.respawn_row = start_row
         self.vx: float = 0.0
         self.vy: float = 0.0
         self.terrain_grip: float = 0.15
@@ -138,6 +140,24 @@ class Car:
         self.y = max(margin, min(self.y, WINDOW_HEIGHT - margin))
         self.vy = 0.0
       
+
+    
+  
+    def set_respawn_point(self, col: int, row: int, circuit) -> bool:
+        """Enregistre un point de réapparition uniquement s'il est valide."""
+        tile = circuit.get_tile(col, row)
+
+        if tile is None:
+            return False
+
+        if getattr(tile, "terrain_type", "road") == "void":
+            return False
+
+        self.respawn_col = col
+        self.respawn_row = row
+        return True
+
+
     
     def reset_position(self, col: int, row: int) -> None:
         """Replace la voiture et annule son mouvement."""
