@@ -16,6 +16,7 @@ class Car:
         self.reverse_mode = False
         self.vx: float = 0.0
         self.vy: float = 0.0
+        self.terrain_grip: float = 0.15
 
     def accelerate(self) -> None:
       max_speed = 5.0
@@ -30,9 +31,15 @@ class Car:
 
      if self.speed > 0:
         self.speed = max(0.0, self.speed - braking_force)
-
+        self.vx *= 0.90
+        self.vy *= 0.90
      elif self.reverse_mode:
-        self.speed -= CAR_ACCELERATION
+      max_reverse_speed = -2.0
+      self.speed = max(
+         self.speed - CAR_ACCELERATION,
+         max_reverse_speed
+    )
+     
 
     def apply_friction(self) -> None:
       """Ralentit progressivement la voiture sans accélération."""
@@ -43,6 +50,18 @@ class Car:
 
       if abs(self.speed) < 0.01:
         self.speed = 0.0
+
+    def set_terrain(self, terrain_type: str) -> None:
+      """Adapte l'adhérence de la voiture au terrain."""
+
+      grips = {
+        "road": 0.15,
+        "grass": 0.08,
+        "dirt": 0.06,
+        "ice": 0.02
+    }
+
+      self.terrain_grip = grips.get(terrain_type, 0.15)
     def turn_left(self) -> None:
       """Tourne la voiture vers la gauche."""
       self.angle -= 1.5
@@ -64,8 +83,7 @@ class Car:
       target_vx = self.speed * math.sin(angle_rad)
       target_vy = self.speed * math.cos(angle_rad)
 
-      terrain_grip = 0.035
-      grip = terrain_grip * GRIP_SCALE
+      grip = self.terrain_grip * GRIP_SCALE
 
       # Dérapage
       self.vx += (target_vx - self.vx) * grip
@@ -85,6 +103,7 @@ class Car:
       if self.y < margin or self.y > WINDOW_HEIGHT - margin:
         self.y = max(margin, min(self.y, WINDOW_HEIGHT - margin))
         self.vy = 0.0
+      
      
     def build_sprite(self) -> pygame.Surface:
         surf = pygame.Surface((CAR_WIDTH, CAR_HEIGHT), pygame.SRCALPHA)
