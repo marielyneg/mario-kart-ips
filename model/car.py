@@ -57,16 +57,21 @@ class Car:
             max_reverse_speed
         )
    
-
+    
     def apply_friction(self) -> None:
-      """Ralentit progressivement la voiture sans accélération."""
+        """Ralentit progressivement la voiture."""
 
-      friction = 0.98
+        friction = 0.98
+        self.speed *= friction
 
-      self.speed *= friction
+        if abs(self.speed) < 0.01:
+            self.speed = 0.0
 
-      if abs(self.speed) < 0.01:
-        self.speed = 0.0
+        # Arrêter les très faibles vitesses résiduelles
+        if self.speed == 0.0 and abs(self.vx) < 0.01 and abs(self.vy) < 0.01:
+            self.vx = 0.0
+            self.vy = 0.0
+
 
     def set_terrain(self, terrain_type: str) -> None:
       """Adapte l'adhérence de la voiture au terrain."""
@@ -107,17 +112,15 @@ class Car:
 
         return getattr(tile, "terrain_type", "road") != "void"
   
-
+    
     def turn_left(self) -> None:
         """Tourne la voiture vers la gauche."""
-        self.angle -= 1.5
-
-
+        self.angle = (self.angle - 1.5) % 360
 
     def turn_right(self) -> None:
-       """Tourne la voiture vers la droite."""
-       self.angle += 1.5
-
+        """Tourne la voiture vers la droite."""
+        self.angle = (self.angle + 1.5) % 360
+ 
     def update_position(self) -> None:
       """Déplace la voiture avec un effet de dérapage."""
 
