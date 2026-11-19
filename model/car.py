@@ -16,6 +16,8 @@ class Car:
         self.reverse_mode = False
         self.respawn_col = start_col
         self.respawn_row = start_row
+        self.start_col = start_col
+        self.start_row = start_row
         self.vx: float = 0.0
         self.vy: float = 0.0
         self.terrain_grip: float = 0.15
@@ -94,7 +96,17 @@ class Car:
             return True
 
         return getattr(tile, "terrain_type", "road") == "void"
-      
+
+    
+    def is_valid_respawn(self, circuit) -> bool:
+        """Vérifie si le point de réapparition est valide."""
+        tile = circuit.get_tile(self.respawn_col, self.respawn_row)
+
+        if tile is None:
+            return False
+
+        return getattr(tile, "terrain_type", "road") != "void"
+  
 
     def turn_left(self) -> None:
         """Tourne la voiture vers la gauche."""

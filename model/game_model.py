@@ -35,6 +35,20 @@ class GameModel:
             car.update_terrain(self.circuit)
             car.update_position()
             if car.is_on_void(self.circuit):
-                 car.reset_position(car.respawn_col, car.respawn_row)
+                if car.is_valid_respawn(self.circuit):
+                    car.reset_position(car.respawn_col, car.respawn_row)
+                else:
+                    start_tile = self.circuit.get_tile(
+                        car.start_col, car.start_row
+                    )
+
+                    if (
+                        start_tile is not None
+                        and getattr(start_tile, "terrain_type", "road") != "void"
+                    ):
+                        car.reset_position(car.start_col, car.start_row)
+                    else:
+                        print("Aucun point de reapparition valide !")
+
  
                  
