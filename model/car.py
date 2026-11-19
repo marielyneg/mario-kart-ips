@@ -118,16 +118,12 @@ class Car:
        """Tourne la voiture vers la droite."""
        self.angle += 1.5
 
-
-
-
-
     def update_position(self) -> None:
       """Déplace la voiture avec un effet de dérapage."""
 
       angle_rad = math.radians(self.angle)
- 
-     # Vitesse souhaitée selon l'orientation de la voiture
+
+      # Vitesse souhaitée selon l'orientation de la voiture
       target_vx = self.speed * math.sin(angle_rad)
       target_vy = self.speed * math.cos(angle_rad)
 
@@ -141,17 +137,6 @@ class Car:
       self.x += self.vx
       self.y += self.vy
 
-      #Limites provisoires de la fenêtre
-      margin = max(CAR_WIDTH, CAR_HEIGHT) / 2
-
-      if self.x < margin or self.x > WINDOW_WIDTH - margin:
-        self.x = max(margin, min(self.x, WINDOW_WIDTH - margin))
-        self.vx = 0.0
-
-      if self.y < margin or self.y > WINDOW_HEIGHT - margin:
-        self.y = max(margin, min(self.y, WINDOW_HEIGHT - margin))
-        self.vy = 0.0
-      
 
     
   
