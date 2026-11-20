@@ -16,10 +16,12 @@ class GameController:
     STATE_SELECT_CIRCUIT = "select_circuit"
     STATE_RACING = GameState.RACING
     STATE_VICTORY = "victory"
+    DISPLAY_SIZE = (800, 600)
 
     def __init__(self):
         """Initialise la fenêtre Pygame, le modèle, la vue et le gestionnaire clavier."""
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.display_screen = pygame.display.set_mode(self.DISPLAY_SIZE, pygame.RESIZABLE)
+        self.screen = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.clock = pygame.time.Clock()
         self.model = GameModel()
         self.view = GameView(self.screen)
